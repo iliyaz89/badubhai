@@ -4,8 +4,7 @@
 
 __appname__ = "Target Pricing Model"
 __author__ = "Iliaz"
-__version__ = "0.0pre0"
-__license__ = ""
+__version__ = "0.0.1"
 
 import logging
 
