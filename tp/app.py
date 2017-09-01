@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 
 import argparse
 import ConfigParser
+from etl.data_fetcher import DataFetcher
 
 
 # -- Code Here --
@@ -49,7 +50,7 @@ if __name__ == '__main__':
 
     if args.run_etl:
         log.info('Running ETL script.')
-        log.debug('Debugging ETL script.')
-        log.error('Error in ETL script.')
-        log.critical('Critical in ETL script.')
 
+        bid_number = 'P260030994'
+        data_fetcher = DataFetcher(config, bid_number)
+        data_fetcher.fetch_data()
