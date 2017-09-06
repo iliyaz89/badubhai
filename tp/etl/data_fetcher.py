@@ -1,7 +1,8 @@
 import logging
 
 import pandas as pd
-from sqlalchemy import create_engine
+import cx_Oracle as cx
+from utils.db_utils import get_db_connection
 
 
 class DataFetcher(object):
@@ -18,9 +19,7 @@ class DataFetcher(object):
 
     def fetch_data(self):
 
-        connection = create_engine(self.db_engine)
-        schema = self.config.get('DATABASE', 'schema')
-        print(connection)
+        connection = get_db_connection()
         if connection:
 
             # Load the views in an order.
@@ -54,7 +53,7 @@ class DataFetcher(object):
 
             # 7. zone_weight
             q7 = "SELECT NVP_BID_NR,SVC_GRP_NR,SVC_GRP_SUF_NR,DEL_ZN_NR,WGT_MS_UNT_TYP_CD, " \
-                 "WGT_CGY_WGY_QY,round(ADJ_PKG_VOL_QY ,10) as PKGBOL," \
+                 "WGT_CGY_WGY_QY, PKGBOL," \
                  "(CASE WGT_MS_UNT_TYP_CD WHEN 'OZ' " \
                  "THEN cast(WGT_CGY_WGY_QY as DECIMAL(9,2)) / 16.0 " \
                  "ELSE cast(WGT_CGY_WGY_QY as DECIMAL(9,2)) END) " \
@@ -76,6 +75,15 @@ class DataFetcher(object):
             q9 = "SELECT * FROM V_TP20_ACCESSORIAL WHERE NVP_BID_NR = '%s' "%self.bid_number
             df_tp_accessorial = pd.read_sql(q9, con=connection)
 
-
+            if(self.validate_data(df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial)):
+                return df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial
+            else:
+                self.log.critical('Data validation for the bid number %s failed.'%(self.bid_number))
         else:
             self.log.critical('Unable to access the databse.')
+
+
+
+    def validate_data(self, df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial):
+        # TODO: Add validation to check if the dataframes are empty?
+        pass

@@ -22,7 +22,7 @@ def set_up_opt_parser():
     parser.add_argument('-q', '--quiet', type=int, default=0)
 
     # ETL
-    parser.add_argument('-etl', '--run-etl', action='store_true', default=False)
+    parser.add_argument('-etl', '--run-etl', action='store_true', default=True)
 
     args = parser.parse_args()
 
