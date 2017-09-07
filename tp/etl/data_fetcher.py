@@ -75,6 +75,11 @@ class DataFetcher(object):
             q9 = "SELECT * FROM V_TP20_ACCESSORIAL WHERE NVP_BID_NR = '%s' "%self.bid_number
             df_tp_accessorial = pd.read_sql(q9, con=connection)
 
+            import joblib
+            import tempfile
+            import os
+            outfile = os.path.join(tempfile.gettempdir(),'%s.data'%self.bid_number)
+            joblib.dump([df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial],outfile,compress=5)
             if(self.validate_data(df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial)):
                 return df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial
             else:
@@ -86,4 +91,4 @@ class DataFetcher(object):
 
     def validate_data(self, df_tp20_bid,df_tp20_bid_shpr,df_tp20_svc_grp,df_tp20_ceiling_svc,df_tp20_shpr_svc,df_ttpsvgp,df_zone_weight,df_tp_accessorial):
         # TODO: Add validation to check if the dataframes are empty?
-        pass
+        return True
