@@ -15,7 +15,6 @@ class DataFetcher(object):
         self.log = logging.getLogger(__name__)
         self.config = config
         self.bid_number = bid_number
-        self.db_engine = config.get('DATABASE', 'engine')
 
     def fetch_data(self):
 

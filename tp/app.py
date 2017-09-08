@@ -11,11 +11,9 @@ import logging
 log = logging.getLogger(__name__)
 
 import argparse
-import ConfigParser
 from etl.data_fetcher import DataFetcher
+from utils.tp_configuration import TPConfiguration
 
-
-# -- Code Here --
 def set_up_opt_parser():
     parser = argparse.ArgumentParser(description='TP 2.0 Engine.')
     parser.add_argument('-v', '--verbose', type=int, default=2)
@@ -39,9 +37,9 @@ def set_up_opt_parser():
 
 
 def load_app_config():
-    config = ConfigParser.ConfigParser()
-    config.readfp(open('tp20_config.ini'))
-    return config
+    tp_config = TPConfiguration()
+    print tp_config
+    return tp_config
 
 
 if __name__ == '__main__':
