@@ -49,6 +49,6 @@ if __name__ == '__main__':
     if args.run_etl:
         log.info('Running ETL script.')
 
-        bid_number = 'P260030994'
+        bid_number = 'P270030835'
         data_fetcher = DataFetcher(config, bid_number)
         data_fetcher.fetch_data()
